@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "name": "Prerequisites & runtimes",
+      "items": [
+        {
+          "id": "vcredist-x64",
+          "displayName": "Microsoft Visual C++ 2015–2022 Redistributable (x64)",
+          "description": "Common runtime dependency for native tools and SQL clients.",
+          "optional": false,
+          "provider": "Winget",
+          "wingetId": "Microsoft.VCRedist.2015+.x64"
+        },
+        {
+          "id": "webview2",
+          "displayName": "Microsoft Edge WebView2 Runtime",
+          "description": "Required by many modern installers and desktop shells.",
+          "optional": false,
+          "provider": "Winget",
+          "wingetId": "Microsoft.EdgeWebView2Runtime"
+        },
+        {
+          "id": "dotnet-sdk-8",
+          "displayName": ".NET SDK (8.x latest)",
+          "description": "SDK for building .NET applications. Adjust wingetVersion to pin a specific SDK.",
+          "optional": false,
+          "provider": "Winget",
+          "wingetId": "Microsoft.DotNet.SDK.8"
+        },
+        {
+          "id": "dotnet-desktop-8",
+          "displayName": ".NET 8 Windows Desktop Runtime",
+          "description": "Desktop (WPF/WinForms) runtime. Pair with your app’s target framework.",
+          "optional": false,
+          "provider": "Winget",
+          "wingetId": "Microsoft.DotNet.DesktopRuntime.8"
+        }
+      ]
+    },
+    {
+      "name": "SQL Server & tools",
+      "items": [
+        {
+          "id": "sql-server-2022-dev",
+          "displayName": "SQL Server 2022 Developer",
+          "description": "Full engine for dev/test. Verify winget id in your tenant (`winget search SQL`). For Express or custom media, switch provider or use a Composite with your MSI.",
+          "optional": false,
+          "provider": "Winget",
+          "wingetId": "Microsoft.SQLServer.2022.Developer"
+        },
+        {
+          "id": "ssms",
+          "displayName": "SQL Server Management Studio (SSMS)",
+          "description": "GUI for SQL Server. Version follows winget default unless you set wingetVersion.",
+          "optional": false,
+          "provider": "Winget",
+          "wingetId": "Microsoft.SQLServerManagementStudio"
+        }
+      ]
+    },
+    {
+      "name": "Data platforms",
+      "items": [
+        {
+          "id": "postgresql-16",
+          "displayName": "PostgreSQL 16",
+          "description": "After install, enable pgvector per database: CREATE EXTENSION vector; (requires compatible server build—use Stack Builder or your approved package if needed.)",
+          "optional": false,
+          "provider": "Winget",
+          "wingetId": "PostgreSQL.PostgreSQL",
+          "wingetVersion": "16"
+        }
+      ]
+    },
+    {
+      "name": "Languages & runtimes",
+      "items": [
+        {
+          "id": "nodejs-lts",
+          "displayName": "Node.js (LTS) + bundled npm",
+          "description": "npm ships with Node. Pin with wingetVersion if your team standardizes on one release.",
+          "optional": false,
+          "provider": "Winget",
+          "wingetId": "OpenJS.NodeJS.LTS"
+        }
+      ]
+    },
+    {
+      "name": "Testing & automation",
+      "items": [
+        {
+          "id": "jmeter",
+          "displayName": "Apache JMeter",
+          "description": "Load testing. Marked optional for machines that rarely need it.",
+          "optional": true,
+          "provider": "Winget",
+          "wingetId": "Apache.JMeter"
+        }
+      ]
+    },
+    {
+      "name": "AI & desktop assistants",
+      "items": [
+        {
+          "id": "claude-desktop",
+          "displayName": "Claude (desktop)",
+          "description": "Anthropic desktop client if published to winget in your region; otherwise replace wingetId or use a custom installer step.",
+          "optional": false,
+          "provider": "Winget",
+          "wingetId": "Anthropic.Claude"
+        }
+      ]
+    },
+    {
+      "name": "Browsers",
+      "items": [
+        {
+          "id": "chrome",
+          "displayName": "Google Chrome",
+          "description": "Stable channel. Pin using wingetVersion when you must match a tested build.",
+          "optional": false,
+          "provider": "Winget",
+          "wingetId": "Google.Chrome"
+        }
+      ]
+    },
+    {
+      "name": "Development IDEs",
+      "items": [
+        {
+          "id": "vs-2022-community",
+          "displayName": "Visual Studio 2022 Community",
+          "description": "Optional full IDE. Large install; select workloads inside VS after setup.",
+          "optional": true,
+          "provider": "Winget",
+          "wingetId": "Microsoft.VisualStudio.2022.Community"
+        }
+      ]
+    },
+    {
+      "name": "Infrastructure",
+      "items": [
+        {
+          "id": "file-share-mount",
+          "displayName": "Map engineering file share (template)",
+          "description": "Replace the PowerShell with your approved UNC mapping (e.g. New-SmbMapping or net use).",
+          "optional": false,
+          "provider": "PowerShell",
+          "powershellInstall": "Write-Host 'TODO: map file share for your environment. Example: New-SmbMapping -RemotePath \\\\fileserver\\engineering -LocalPath Z: -Persistent $true'; exit 0",
+          "powershellUninstall": "Write-Host 'TODO: remove mapping for your drive letter / share.'; exit 0"
+        }
+      ]
+    }
+  ]
+}
