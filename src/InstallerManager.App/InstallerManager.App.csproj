@@ -19,6 +19,8 @@
     <Content Include="Data\catalog.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!-- Baked into the assembly so a published app can run without a loose Data\ file (see CatalogRepository). -->
+    <EmbeddedResource Include="Data\catalog.json" />
   </ItemGroup>
 
 </Project>

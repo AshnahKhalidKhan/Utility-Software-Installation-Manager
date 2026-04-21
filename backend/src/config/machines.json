@@ -1,0 +1,36 @@
+{
+  "user@company.com": {
+    "hostname": "DESKTOP-01",
+    "os": "windows",
+    "ip": "192.168.1.10",
+    "helperPort": 7334,
+    "sshPort": 22,
+    "winrmPort": 5985,
+    "description": "Primary developer workstation"
+  },
+  "jane@company.com": {
+    "hostname": "MACBOOK-JANE",
+    "os": "macos",
+    "ip": "192.168.1.20",
+    "helperPort": 7334,
+    "sshPort": 22,
+    "description": "Jane Smith's MacBook Pro"
+  },
+  "devserver@company.com": {
+    "hostname": "DEV-SERVER-01",
+    "os": "linux",
+    "ip": "192.168.1.30",
+    "helperPort": 7334,
+    "sshPort": 22,
+    "description": "Shared development server (Ubuntu 22.04)"
+  },
+  "bob@company.com": {
+    "hostname": "DESKTOP-BOB",
+    "os": "windows",
+    "ip": "192.168.1.40",
+    "helperPort": 7334,
+    "sshPort": 22,
+    "winrmPort": 5985,
+    "description": "Bob's workstation"
+  }
+}

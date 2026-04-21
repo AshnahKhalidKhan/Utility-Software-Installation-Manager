@@ -1,0 +1,13 @@
+{
+  "name": "installer-manager-helper-agent",
+  "version": "1.0.0",
+  "description": "Lightweight local agent — executes remote installation commands issued by the backend",
+  "main": "agent.js",
+  "scripts": {
+    "start": "node agent.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {}
+}

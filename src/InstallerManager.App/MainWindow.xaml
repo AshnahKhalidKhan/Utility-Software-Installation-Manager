@@ -9,7 +9,38 @@
         Width="980"
         MinHeight="480"
         MinWidth="720">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    </Window.Resources>
     <DockPanel Margin="12">
+        <Border DockPanel.Dock="Top"
+                Margin="0,0,0,8"
+                Padding="10"
+                Background="#FFF8E1"
+                BorderBrush="#FFC107"
+                BorderThickness="1"
+                CornerRadius="2"
+                Visibility="{Binding ShowElevationBanner, Converter={StaticResource BoolToVisibility}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           TextWrapping="Wrap"
+                           VerticalAlignment="Center"
+                           Foreground="#5D4037"
+                           Text="Not running as Administrator — installs/uninstalls will usually fail. Use the button to restart with UAC (works with dotnet run and the .exe), or right-click InstallerManager.exe → Run as administrator." />
+                <Button Grid.Column="1"
+                        Margin="12,0,0,0"
+                        MinWidth="200"
+                        Height="32"
+                        VerticalAlignment="Center"
+                        Content="Restart as administrator"
+                        Command="{Binding RestartAsAdministratorCommand}" />
+            </Grid>
+        </Border>
+
         <Border DockPanel.Dock="Top" Padding="0,0,0,12">
             <StackPanel>
                 <TextBlock FontSize="20" FontWeight="SemiBold" Text="Utility Software Installation Manager" />

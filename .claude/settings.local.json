@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ':*)",
+      "Bash(npm install:*)",
+      "Bash(node --input-type=module)",
+      "Bash(node -c src/services/scriptGenerator.js)",
+      "Bash(node -c src/services/commandParser.js)",
+      "Bash(node -c src/services/remoteExecution.js)",
+      "Bash(node -c src/services/helperDetection.js)",
+      "Bash(node -c src/services/machineMapping.js)",
+      "Bash(node -c src/api/routes.js)"
+    ]
+  }
+}

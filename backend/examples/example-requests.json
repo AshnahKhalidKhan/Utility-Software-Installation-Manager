@@ -1,0 +1,143 @@
+{
+  "_comment": "Example requests and expected responses for the Installer Manager Backend API",
+
+  "curlExamples": {
+    "healthCheck": {
+      "description": "Verify the backend is up",
+      "command": "curl http://localhost:3000/health"
+    },
+    "installNodejs": {
+      "description": "Install Node.js and npm on a registered Windows machine",
+      "command": "curl -X POST http://localhost:3000/api/execute -H \"Content-Type: application/json\" -d \"{\\\"user\\\": \\\"user@company.com\\\", \\\"command\\\": \\\"Install Node.js and npm\\\"}\""
+    },
+    "installPostgres": {
+      "description": "Install PostgreSQL — password auto-injected",
+      "command": "curl -X POST http://localhost:3000/api/execute -H \"Content-Type: application/json\" -d \"{\\\"user\\\": \\\"user@company.com\\\", \\\"command\\\": \\\"Install PostgreSQL\\\"}\""
+    },
+    "uninstallPython": {
+      "description": "Uninstall Python",
+      "command": "curl -X POST http://localhost:3000/api/execute -H \"Content-Type: application/json\" -d \"{\\\"user\\\": \\\"user@company.com\\\", \\\"command\\\": \\\"Uninstall Python 3.11\\\"}\""
+    },
+    "registerMachine": {
+      "description": "Register a new machine for a user",
+      "command": "curl -X POST http://localhost:3000/api/machines/register -H \"Content-Type: application/json\" -d \"{\\\"user\\\": \\\"alice@company.com\\\", \\\"hostname\\\": \\\"ALICE-PC\\\", \\\"os\\\": \\\"windows\\\", \\\"ip\\\": \\\"192.168.1.50\\\", \\\"helperPort\\\": 7334}\""
+    },
+    "getMachine": {
+      "description": "Look up the machine for a user",
+      "command": "curl http://localhost:3000/api/machines/user@company.com"
+    },
+    "helperInstructions": {
+      "description": "Get helper agent install instructions for Windows",
+      "command": "curl http://localhost:3000/api/helper/instructions/windows"
+    }
+  },
+
+  "scenarioWalkthrough": [
+    {
+      "scenario": "1 — Happy path: Node.js install",
+      "request":  { "user": "user@company.com", "command": "Install Node.js and npm" },
+      "expectedStatus": "success",
+      "expectedMessageContains": "installed successfully on DESKTOP-01"
+    },
+    {
+      "scenario": "2 — Password-protected software: PostgreSQL",
+      "request":  { "user": "user@company.com", "command": "Install PostgreSQL" },
+      "expectedStatus": "success",
+      "note": "Backend injects DEFAULT_SOFTWARE_PASSWORD env var — user never sees or types the password"
+    },
+    {
+      "scenario": "3 — Helper agent not installed",
+      "request":  { "user": "bob@company.com", "command": "Install Git" },
+      "expectedStatus": "helper_required",
+      "expectedResponseFields": ["title", "steps", "downloadLink", "oneLineInstall"]
+    },
+    {
+      "scenario": "4 — Unknown user",
+      "request":  { "user": "ghost@company.com", "command": "Install Docker" },
+      "expectedStatus": "error",
+      "expectedMessageContains": "No machine registered"
+    },
+    {
+      "scenario": "5 — Blocked software",
+      "request":  { "user": "user@company.com", "command": "Install some-unlisted-tool" },
+      "expectedStatus": "blocked",
+      "expectedMessageContains": "not in the allowlist"
+    },
+    {
+      "scenario": "6 — Remote execution fails → fallback script",
+      "request":  { "user": "user@company.com", "command": "Install Visual Studio 2022" },
+      "expectedStatus": "fallback",
+      "expectedResponseFields": ["script", "instructions", "filename"]
+    },
+    {
+      "scenario": "7 — Linux machine",
+      "request":  { "user": "devserver@company.com", "command": "Install Python 3.11 and pip" },
+      "expectedStatus": "success",
+      "note": "Uses apt-get commands for Ubuntu target"
+    },
+    {
+      "scenario": "8 — macOS machine",
+      "request":  { "user": "jane@company.com", "command": "Install Homebrew and Docker" },
+      "expectedStatus": "success",
+      "note": "Uses brew commands for macOS target"
+    }
+  ],
+
+  "responseShapes": {
+    "success": {
+      "status": "success",
+      "requestId": "<uuid>",
+      "message": "Node.js, npm installed successfully on DESKTOP-01.",
+      "hostname": "DESKTOP-01",
+      "os": "windows",
+      "action": "install",
+      "software": ["Node.js", "npm"],
+      "executionMethod": "helper-agent",
+      "steps": [
+        { "command": "winget install OpenJS.NodeJS.LTS ...", "success": true, "output": "..." }
+      ],
+      "verification": "v20.11.0\n10.2.4",
+      "requiresReboot": false
+    },
+    "helperRequired": {
+      "status": "helper_required",
+      "requestId": "<uuid>",
+      "required": true,
+      "message": "⚠️ The Helper Agent is not installed on DESKTOP-01...",
+      "hostname": "DESKTOP-01",
+      "os": "windows",
+      "title": "Install Helper Agent on Windows",
+      "steps": ["1. Open PowerShell as Administrator...", "..."],
+      "downloadLink": "https://it.company.com/installer-agent/install-windows.ps1",
+      "oneLineInstall": "irm https://it.company.com/installer-agent/install-windows.ps1 | iex"
+    },
+    "fallback": {
+      "status": "fallback",
+      "requestId": "<uuid>",
+      "os": "windows",
+      "filename": "install-visual-studio-2022-1712345678.ps1",
+      "contentType": "application/x-powershell",
+      "script": "#Requires -RunAsAdministrator\n...",
+      "instructions": [
+        "Save the script content to a .ps1 file",
+        "Open PowerShell as Administrator",
+        "..."
+      ],
+      "hostname": "DESKTOP-01",
+      "failedCommand": "...",
+      "failureReason": "Connection refused",
+      "message": "Remote execution failed on DESKTOP-01. Use the script below to install manually."
+    },
+    "error": {
+      "status": "error",
+      "requestId": "<uuid>",
+      "error": "No machine registered for \"ghost@company.com\"."
+    },
+    "blocked": {
+      "status": "blocked",
+      "requestId": "<uuid>",
+      "error": "This request was blocked by the IT security policy.",
+      "details": ["Software \"some-unlisted-tool\" is not in the allowlist — contact IT to add it"]
+    }
+  }
+}
